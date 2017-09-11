@@ -33,6 +33,8 @@ repositories {
 dependencies {
     // Kotlin
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+
+	compile 'org.eclipse.jgit:org.eclipse.jgit:4.8.0.201706111038-r'
    
     // Junit
     testCompile 'org.junit.jupiter:junit-jupiter-api:5.0.0-M4'
