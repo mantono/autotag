@@ -1,16 +1,27 @@
 package com.mantono.autotag
 
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 
 class GitFindVersionTests
 {
 	@Test
-	fun gitFindTagsForEmptyRepo()
+	fun gitFindTagsForNonEmptyRepo()
 	{
-		val workingDir = System.getProperty("user.dir")
-		val tags = listTagsForDir(workingDir)
-		assertTrue(tags.isEmpty())
+		val workingDir = System.getProperty("user.dir")!!
+		println(workingDir)
+		val tags = listTagsForRepo(workingDir)
+		println(tags)
+		assertTrue(tags.isNotEmpty())
+	}
+
+	@Test
+	fun gitFindTagsForNonGitRepo()
+	{
+		assertThrows(IllegalArgumentException::class.java)
+		{
+			listTagsForRepo("/dev/null")
+		}
 	}
 }
