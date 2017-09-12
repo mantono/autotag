@@ -6,7 +6,8 @@ enum class Flag(val arg: String)
 	NO_SNAPSHOT("no-snapshot"),
 	MAJOR("major"),
 	MINOR("minor"),
-	BUILD("build")
+	BUILD("build"),
+	DRY("dry")
 }
 
 fun asFlag(arg: String): Flag

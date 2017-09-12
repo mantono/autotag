@@ -3,20 +3,35 @@ package com.mantono.autotag
 fun main(args: Array<String>)
 {
 	val (repo, givenVersion, arguments) = filterArgs(args)
+	val currentVersion = highestProjectVersion("/home/anton/code/autotag")
+	val newVersion: Version = computeNewVersion(currentVersion, givenVersion, arguments)
 
-	val version = highestProjectVersion("/home/anton/code/autotag")
-	//val version = getCorrectVersionOf(currentVersion, givenVersion)
-	print("Changing version from '$version' -> ")
-	val updatedVersion = version.increment()
-	println("'$updatedVersion'")
-	writeGradle(repo, updatedVersion)
-	tagGit(updatedVersion)
+	print("Changing version from '$currentVersion' -> ")
+	println("'$newVersion'")
+	writeGradle(repo, newVersion)
+	tagGit(newVersion)
 }
 
-fun getCorrectVersionOf(currentVersion: Version, givenVersion: Version?): Version
+private fun computeNewVersion(currentVersion: Version, givenVersion: Version?, arguments: List<Flag>): Version
 {
-	givenVersion?.let { if(it > currentVersion) return it }
-	return currentVersion
+	val incremented: Version = incrementCurrentVersion(currentVersion, arguments)
+	return givenVersion?.let {
+		if(it > currentVersion)
+			it
+		else
+			throw IllegalArgumentException("Given version $it is not greater than the current version $currentVersion")
+	} ?: incremented
+}
+
+private fun incrementCurrentVersion(currentVersion: Version, arguments: List<Flag>): Version
+{
+	if(Flag.MAJOR in arguments)
+		return currentVersion.incrementMajor()
+	if(Flag.MINOR in arguments)
+		return currentVersion.incrementMinor()
+	if(Flag.BUILD in arguments)
+		return currentVersion.incrementBuild()
+	return currentVersion.increment()
 }
 
 fun filterArgs(args: Array<String>): Triple<String, Version?, List<Flag>>

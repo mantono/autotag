@@ -30,4 +30,4 @@ fun highestGitVersion(versions: List<Version>): Version
 	}
 }
 
-fun tagGit(version: Version) = Runtime.getRuntime().exec("git tag '$version'").waitFor()
+fun tagGit(version: Version) = Runtime.getRuntime().exec("git tag $version").waitFor()
