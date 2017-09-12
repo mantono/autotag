@@ -29,3 +29,5 @@ fun highestGitVersion(versions: List<Version>): Version
 		else -> Version(0, 1, snapshot = true)
 	}
 }
+
+fun tagGit(version: Version) = Runtime.getRuntime().exec("git tag '$version'").waitFor()

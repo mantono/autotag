@@ -19,3 +19,20 @@ fun gradleVersion(repo: String): Version
 		.sortedDescending()
 		.first()
 }
+
+fun writeGradle(repo: String, version: Version)
+{
+	val file = File("$repo/build.gradle")
+	val updateFile: List<String> = Files.lines(file.toPath())
+		.asSequence()
+		.map {
+			when(it.contains(GRADLE_VERSION_REGEX))
+			{
+				true -> "version = '$version'"
+				false -> it
+			}
+		}
+		.toList()
+
+	Files.write(file.toPath(), updateFile)
+}
