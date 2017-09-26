@@ -9,7 +9,16 @@ fun main(args: Array<String>)
 	print("Changing version from '$currentVersion' -> ")
 	println("'$newVersion'")
 	writeGradle(repo, newVersion)
+	commit(newVersion)
 	tagGit(newVersion)
+}
+
+fun commit(version: Version)
+{
+	Runtime.getRuntime().apply {
+		exec("git add build.gradle").waitFor()
+		exec("git commit -m 'Version $version' --no-gpg-sign").waitFor()
+	}
 }
 
 private fun computeNewVersion(currentVersion: Version, givenVersion: Version?, arguments: List<Flag>): Version
